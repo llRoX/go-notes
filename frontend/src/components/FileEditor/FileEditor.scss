@@ -1,0 +1,37 @@
+.file-editor {
+
+
+    .file-editor-header {
+        .file-editor-header-buttons {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            margin: 10px 0px;
+
+            button {
+                padding: 5px 20px;
+
+                &:hover {
+                    cursor: pointer;
+                }
+
+            }
+        }
+    }
+
+    .file-editor-formatted {
+        min-height: 80vh;
+        box-shadow: 0px 2px 5px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+
+    .file-editor-editor {
+        min-height: 80vh;
+        box-shadow: 0px 2px 5px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        width: 100%;
+        border: 0;
+        padding: 20px;
+
+    }
+}

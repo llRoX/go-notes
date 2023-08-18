@@ -11,9 +11,21 @@
         padding: 10px;
         font-size: 16px;
     }
+
 }
 
 .file-list-list {
     overflow-y: auto;
     height: 500px;
+
+
+    .file-list-empty {
+        padding: 20px 0px;
+        text-align: center;
+    }
+
+    .file-list-loading {
+        padding: 20px 0px;
+        text-align: center;
+    }
 }

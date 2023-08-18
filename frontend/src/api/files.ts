@@ -11,7 +11,7 @@ function getFiles() {
     return instance.get("/files")
 }
 
-function getFile(path) {
+function getFile(path: string) {
     return instance.get(`/files/${path}`);
 }
 

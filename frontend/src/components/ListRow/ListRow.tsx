@@ -2,12 +2,13 @@ import React from 'react'
 import "./ListRow.scss"
 interface props {
     path: string
+    onClick: (path: string) => void
 }
 
 
-const ListRow = ({ path }: props) => {
+const ListRow = ({ path, onClick }: props) => {
     return (
-        <div className="list-row">{path}</div>
+        <div className="list-row" onClick={onClick}>{path}</div>
     )
 }
 
