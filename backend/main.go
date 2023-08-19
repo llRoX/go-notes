@@ -13,12 +13,8 @@ func serve(w http.ResponseWriter, r *http.Request) {
 
 }
 
-type Test struct {
-	Value string
-}
-
-func test(store storage.Storage) {
-	store.FileExists("d")
+type PatchNoteMessage struct {
+	Markdown string `json:"markdown"`
 }
 
 func setupRoutes() {
@@ -27,10 +23,15 @@ func setupRoutes() {
 	s, _ := storage.NewStorage(path)
 
 	http.HandleFunc("/files", func(w http.ResponseWriter, r *http.Request) {
-		files := s.ListFiles()
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		enc := json.NewEncoder(w)
-		enc.Encode(files)
+
+		if r.Method == http.MethodGet {
+			files := s.ListFiles()
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			enc := json.NewEncoder(w)
+			enc.Encode(files)
+			return
+		}
+
 	})
 
 	http.HandleFunc("/files/", func(w http.ResponseWriter, r *http.Request) {
@@ -41,14 +42,36 @@ func setupRoutes() {
 		}
 
 		filePath, _ := strings.CutPrefix(urlPath, "/files/")
-		fileData, err := s.ReadFile(filePath)
-		if err != nil {
-			http.NotFound(w, r)
-			return
+		fmt.Println(r.Method)
+		if r.Method == http.MethodGet {
+			fileData, err := s.ReadFile(filePath)
+			if err != nil {
+				http.NotFound(w, r)
+				return
+			}
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			enc := json.NewEncoder(w)
+			enc.Encode(string(fileData))
+		} else if r.Method == http.MethodPatch {
+			var message PatchNoteMessage
+			err := json.NewDecoder(r.Body).Decode(&message)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			fmt.Println("patch")
+
+			s.PatchFile(filePath, message.Markdown)
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.WriteHeader(http.StatusOK)
+
+		} else {
+			fmt.Println("other")
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.Header().Set("Access-Control-Allow-Methods", "*")
+			w.Header().Set("Access-Control-Allow-Headers", "*")
+			// w.WriteHeader(http.StatusOK)
 		}
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		enc := json.NewEncoder(w)
-		enc.Encode(string(fileData))
 
 	})
 }

@@ -15,10 +15,17 @@ function getFile(path: string) {
     return instance.get(`/files/${path}`);
 }
 
+function patchFile(path: string, markdown: string) {
+    return instance.patch(`/files/${path}`, {
+        markdown: markdown
+    });
+}
+
 
 const api = {
     getFiles,
-    getFile
+    getFile,
+    patchFile
 }
 
 export default api;

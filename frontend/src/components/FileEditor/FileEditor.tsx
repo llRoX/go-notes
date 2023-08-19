@@ -54,10 +54,11 @@ const FileEditor = (props: props) => {
         }
     }
 
+
     const selectContent = () => {
         switch (mode) {
             case 'edit': {
-                return (<textarea onChange={(e) => setMarkdown(e.target.value)} className="file-editor-editor">{markdown}</textarea>);
+                return (<textarea value={markdown} onChange={(e) => setMarkdown(e.target.value)} className="file-editor-editor"></textarea>);
             }
             case 'view': {
                 return (<div className="file-editor-formatted" dangerouslySetInnerHTML={{ __html: html }} />
@@ -69,6 +70,12 @@ const FileEditor = (props: props) => {
         }
     }
 
+    const save = (event) => {
+        event.preventDefault();
+
+        api.patchFile(props.path, markdown)
+    }
+
 
 
     return (
@@ -76,7 +83,7 @@ const FileEditor = (props: props) => {
             <div className="file-editor-header">
                 <h2>{props.path}</h2>
                 <div className="file-editor-header-buttons">
-                    <button>Save</button>
+                    <button onClick={save}>Save</button>
                     {selectButton()}
                 </div>
 
